@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { db } from '../../db'
 import type { ApiResponse } from '../../types'
 import { Role } from '../../generated/prisma/enums'
+import {genSalt, hash} from 'bcrypt'
 
 export const signUpSchema = z.object({
   name: z.string().min(2),
@@ -32,8 +33,14 @@ export async function handleSignUp(req: Request, res: Response) {
     return res.status(400).json(response)
   }
 
+  const salt = await genSalt(10)
+  const hashedPass = await hash(parsedReq.password, salt)
+  
   const newUser = await db.user.create({
-    data: parsedReq,
+    data: {
+      ...parsedReq,
+      password: hashedPass,
+    },
     select: {
       id: true,
       name: true,
@@ -51,10 +58,10 @@ export async function handleSignUp(req: Request, res: Response) {
     phone: newUser.phone,
   }
 
-  const successRes: ApiResponse = {
+  const successResponse: ApiResponse = {
     success: true,
     data: orderedUser,
     error: null,
   }
-  return res.status(201).json(successRes)
+  return res.status(201).json(successResponse)
 }
