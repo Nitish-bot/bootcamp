@@ -7,8 +7,8 @@ import { env } from 'bun'
 import { SignJWT } from 'jose'
 
 export const loginSchema = z.object({
-  email: z.email(),
-  password: z.string(),
+  email: z.email().nonempty(),
+  password: z.string().nonempty(),
 })
 
 type LoginRequest = z.infer<typeof loginSchema>

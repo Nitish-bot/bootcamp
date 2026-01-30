@@ -6,9 +6,9 @@ import { Role } from '@/generated/prisma/enums'
 import { genSalt, hash } from 'bcrypt'
 
 export const signUpSchema = z.object({
-  name: z.string().min(2),
-  email: z.email(),
-  password: z.string(),
+  name: z.string().nonempty(),
+  email: z.email().nonempty(),
+  password: z.string().nonempty(),
   role: z
     .string()
     .optional()

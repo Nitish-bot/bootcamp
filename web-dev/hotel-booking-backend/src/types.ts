@@ -1,3 +1,6 @@
+import type { Request } from "express"
+import type { Role } from "./generated/prisma/enums"
+
 export type ApiResponse<T = unknown> =
   | {
       success: true
@@ -9,3 +12,12 @@ export type ApiResponse<T = unknown> =
       data: null
       error: string
     }
+
+type User = {
+  id: string
+  role: Role
+}
+
+export type AuthenticatedRequest = Request & {
+  user?: User
+}
