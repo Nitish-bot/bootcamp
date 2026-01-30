@@ -1,0 +1,33 @@
+{
+  "name": "hotel-booking-backend",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "prisma": "bunx --bun prisma",
+    "prisma:format": "bun run prisma format",
+    "prisma:generate": "bun run prisma generate",
+    "lint": "eslint . --fix",
+    "fmt": "prettier --write ."
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "@types/bun": "latest",
+    "@types/express": "^5.0.6",
+    "@types/pg": "^8.16.0",
+    "eslint": "^9.39.2",
+    "globals": "^17.2.0",
+    "prettier": "^3.8.1",
+    "prisma": "^7.3.0",
+    "typescript-eslint": "^8.54.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.3.0",
+    "@prisma/client": "^7.3.0",
+    "express": "^5.2.1",
+    "pg": "^8.17.2"
+  }
+}
