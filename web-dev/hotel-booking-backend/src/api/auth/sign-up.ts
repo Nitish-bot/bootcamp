@@ -1,9 +1,9 @@
 import type { Request, Response } from 'express'
 import { z } from 'zod'
-import { db } from '../../db'
-import type { ApiResponse } from '../../types'
-import { Role } from '../../generated/prisma/enums'
-import {genSalt, hash} from 'bcrypt'
+import { db } from '@/db'
+import type { ApiResponse } from '@/types'
+import { Role } from '@/generated/prisma/enums'
+import { genSalt, hash } from 'bcrypt'
 
 export const signUpSchema = z.object({
   name: z.string().min(2),
@@ -35,7 +35,7 @@ export async function handleSignUp(req: Request, res: Response) {
 
   const salt = await genSalt(10)
   const hashedPass = await hash(parsedReq.password, salt)
-  
+
   const newUser = await db.user.create({
     data: {
       ...parsedReq,

@@ -1,5 +1,5 @@
 import { env } from 'bun'
-import { createApp } from './src/app'
+import { createApp } from '@/app'
 
 const app = createApp()
 const port = env.PORT

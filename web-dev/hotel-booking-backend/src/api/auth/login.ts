@@ -1,10 +1,10 @@
-import { type Request, type Response } from "express";
-import z from "zod";
+import { type Request, type Response } from 'express'
+import z from 'zod'
 import { compare } from 'bcrypt'
-import { db } from "../../db";
-import type { ApiResponse } from "../../types";
-import { env } from "bun";
-import { SignJWT } from "jose";
+import { db } from '@/db'
+import type { ApiResponse } from '@/types'
+import { env } from 'bun'
+import { SignJWT } from 'jose'
 
 export const loginSchema = z.object({
   email: z.email(),
@@ -18,11 +18,11 @@ export async function handleLogin(req: Request, res: Response) {
   const invalidCredentialResponse: ApiResponse = {
     success: false,
     data: null,
-    error: "INVALID_CREDENTIALS",
-  }  
+    error: 'INVALID_CREDENTIALS',
+  }
 
   const possibleUser = await db.user.findUnique({
-    where: {email: parsedReq.email}
+    where: { email: parsedReq.email },
   })
   if (!possibleUser) {
     return res.status(401).json(invalidCredentialResponse)
@@ -38,7 +38,7 @@ export async function handleLogin(req: Request, res: Response) {
     }
 
     const token = await new SignJWT(tokenData)
-      .setProtectedHeader({alg: 'HS256'})
+      .setProtectedHeader({ alg: 'HS256' })
       .setIssuedAt()
       .setExpirationTime('12h')
       .sign(jwtSecretKey)
@@ -49,8 +49,8 @@ export async function handleLogin(req: Request, res: Response) {
         id: possibleUser.id,
         name: possibleUser.name,
         email: possibleUser.email,
-        role: possibleUser.role
-      }
+        role: possibleUser.role,
+      },
     }
     const successResponse: ApiResponse = {
       success: true,

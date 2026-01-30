@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from 'express'
 import type { ZodType } from 'zod'
-import type { ApiResponse } from './types'
+import type { ApiResponse } from '@/types'
 
 export function requestValidator(schema: ZodType) {
   return (req: Request, res: Response, next: NextFunction) => {
@@ -28,12 +28,12 @@ export function requestValidator(schema: ZodType) {
 
 export function jwtValidator(req: Request, res: Response, next: NextFunction) {
   const authHeader = req.headers['authorization']
-  const token = authHeader && authHeader.split(" ")[1]
+  const token = authHeader && authHeader.split(' ')[1]
 
   const unauthResponse: ApiResponse = {
     success: false,
     data: null,
-    error: "UNAUTHORIZED"
+    error: 'UNAUTHORIZED',
   }
   if (!token) {
     return res.status(401).json(unauthResponse)

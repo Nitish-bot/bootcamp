@@ -1,7 +1,7 @@
 import express from 'express'
-import { requestValidator } from './validator-middleware'
-import { signUpSchema, handleSignUp } from './api/auth/sign-up'
-import { loginSchema, handleLogin } from './api/auth/login'
+import { requestValidator } from '@/validator-middleware'
+import { signUpSchema, handleSignUp } from '@/api/auth/sign-up'
+import { loginSchema, handleLogin } from '@/api/auth/login'
 
 export function createApp() {
   const app = express()
