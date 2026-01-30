@@ -5,10 +5,15 @@
   "private": true,
   "scripts": {
     "prisma": "bunx --bun prisma",
-    "prisma:format": "bun run prisma format",
-    "prisma:generate": "bun run prisma generate",
     "lint": "eslint . --fix",
     "fmt": "prettier --write ."
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.3.0",
+    "@prisma/client": "^7.3.0",
+    "express": "^5.2.1",
+    "pg": "^8.17.2",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
@@ -23,11 +28,5 @@
   },
   "peerDependencies": {
     "typescript": "^5"
-  },
-  "dependencies": {
-    "@prisma/adapter-pg": "^7.3.0",
-    "@prisma/client": "^7.3.0",
-    "express": "^5.2.1",
-    "pg": "^8.17.2"
   }
 }

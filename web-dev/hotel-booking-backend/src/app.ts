@@ -1,11 +1,12 @@
-import express from 'express';
+import express from 'express'
+import { validatorMiddleware } from './validator-middleware'
+import { signUpSchema, handleSignUp } from './api/auth/sign-up'
 
 export function createApp() {
-  const app = express();
+  const app = express()
+  app.use(express.json())
 
-  app.get('/', (req, res) => {
-    res.send('Hello World!');
-  });
+  app.post('/api/auth/signup', validatorMiddleware(signUpSchema), handleSignUp)
 
-  return app;
+  return app
 }
