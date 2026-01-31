@@ -6,15 +6,15 @@ import z from "zod";
 export const createHotelSchema = z.object({
   name: z.string().nonempty(),
   description: z.string().nonempty(),
-  city: z.string().nonempty(),
-  country: z.string().nonempty(),
+  city: z.string().nonempty().transform((val) => val?.toLowerCase()),
+  country: z.string().nonempty().transform((val) => val?.toLowerCase()),
   amenities: z.array(z.string()).optional().default([]),
 })
 
 type CreateHotelRequest = z.infer<typeof createHotelSchema>
 
 export async function handleCreateHotel(req: AuthenticatedRequest, res: Response) {
-  if (!req.user || req.user.role == 'customer') {
+  if (!req.user || req.user.role === 'customer') {
     const forbiddenResponse: ApiResponse = {
       success: false,
       data: null,

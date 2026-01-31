@@ -27,18 +27,20 @@ model User {
 }
 
 model Hotel {
-  id          String    @id @default(cuid())
-  owner       User      @relation(fields: [owner_id], references: [id])
-  owner_id    String
-  name        String
-  description String?
-  city        String
-  country     String
-  amenities   Json
-  rooms       Room[]
-  bookings    Booking[]
-  reviews     Review[]
-  created_at  DateTime  @default(now())
+  id            String    @id @default(cuid())
+  owner         User      @relation(fields: [owner_id], references: [id])
+  owner_id      String
+  name          String
+  description   String?
+  city          String
+  country       String
+  amenities     Json
+  rating        Float
+  total_reviews Int
+  rooms         Room[]
+  bookings      Booking[]
+  reviews       Review[]
+  created_at    DateTime  @default(now())
 }
 
 model Room {
