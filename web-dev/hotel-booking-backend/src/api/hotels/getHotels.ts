@@ -6,24 +6,24 @@ import z from 'zod'
 const querySchema = z.object({
   city: z
     .string()
-    .optional()
-    .transform(val => val?.toLowerCase()),
+    .transform(val => val?.toLowerCase())
+    .optional(),
   country: z
     .string()
-    .optional()
-    .transform(val => val?.toLowerCase()),
+    .transform(val => val?.toLowerCase())
+    .optional(),
   minPrice: z.coerce.number().int().optional(),
   maxPrice: z.coerce.number().int().optional(),
   minRating: z.int().min(0).max(5).optional(),
 })
 
 export async function handleGetHotels(req: AuthenticatedRequest, res: Response) {
-  const params = querySchema.parse(req.query)
+  const query = querySchema.parse(req.query)
 
   let hotels = await db.hotel.findMany({
     where: {
-      city: params.city,
-      country: params.country,
+      city: query.city,
+      country: query.country,
     },
     include: {
       rooms: true,
@@ -31,15 +31,15 @@ export async function handleGetHotels(req: AuthenticatedRequest, res: Response) 
     },
   })
 
-  if (params.minPrice !== undefined) {
-    const minPrice = params.minPrice
+  if (query.minPrice !== undefined) {
+    const minPrice = query.minPrice
     hotels = hotels.filter(hotel =>
       hotel.rooms.some(room => room.price_per_night > minPrice)
     )
   }
 
-  if (params.maxPrice !== undefined) {
-    const maxPrice = params.maxPrice
+  if (query.maxPrice !== undefined) {
+    const maxPrice = query.maxPrice
     hotels = hotels.filter(hotel =>
       hotel.rooms.some(room => room.price_per_night < maxPrice)
     )
@@ -62,8 +62,8 @@ export async function handleGetHotels(req: AuthenticatedRequest, res: Response) 
     }
   })
 
-  if (params.minRating !== undefined) {
-    const minRating = params.minRating
+  if (query.minRating !== undefined) {
+    const minRating = query.minRating
     structuredHotels.filter(hotel => hotel.rating > minRating)
   }
 

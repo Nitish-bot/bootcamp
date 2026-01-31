@@ -34,6 +34,8 @@ export async function handleCreateHotel(req: AuthenticatedRequest, res: Response
     data: {
       ...parsedReq,
       owner_id: req.user.id,
+      rating: 0.0,
+      total_reviews: 0
     },
   })
 

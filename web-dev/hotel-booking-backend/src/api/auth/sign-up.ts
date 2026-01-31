@@ -11,9 +11,9 @@ export const signUpSchema = z.object({
   password: z.string().nonempty(),
   role: z
     .string()
-    .optional()
     .transform(val => val?.toLowerCase())
     .pipe(z.enum(Role))
+    .optional()
     .default(Role.customer),
   phone: z.string().optional(),
 })
