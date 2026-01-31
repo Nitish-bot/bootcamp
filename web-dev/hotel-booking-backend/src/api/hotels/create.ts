@@ -33,15 +33,15 @@ export async function handleCreateHotel(req: AuthenticatedRequest, res: Response
   const hotel = await db.hotel.create({
     data: {
       ...parsedReq,
-      owner_id: req.user.id,
+      ownerId: req.user.id,
       rating: 0.0,
-      total_reviews: 0
+      totalReviews: 0,
     },
   })
 
   const orderedData = {
     id: hotel.id,
-    ownerId: hotel.owner_id,
+    ownerId: hotel.ownerId,
     name: hotel.name,
     description: hotel.description,
     city: hotel.city,

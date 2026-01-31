@@ -20,74 +20,74 @@ model User {
   password     String
   role         Role
   phone        String?
-  owned_hotels Hotel[]
+  ownedHotels Hotel[]
   bookings     Booking[]
   reviews      Review[]
-  created_at   DateTime  @default(now())
+  createdAt   DateTime  @default(now())
 }
 
 model Hotel {
   id            String    @id @default(cuid())
-  owner         User      @relation(fields: [owner_id], references: [id])
-  owner_id      String
+  owner         User      @relation(fields: [ownerId], references: [id])
+  ownerId      String
   name          String
   description   String?
   city          String
   country       String
   amenities     Json
   rating        Float
-  total_reviews Int
+  totalReviews Int
   rooms         Room[]
   bookings      Booking[]
   reviews       Review[]
-  created_at    DateTime  @default(now())
+  createdAt    DateTime  @default(now())
 }
 
 model Room {
   id              String    @id @default(cuid())
-  hotel           Hotel     @relation(fields: [hotel_id], references: [id], onDelete: Cascade)
-  hotel_id        String
-  room_number     String
-  room_type       String
-  price_per_night Float
-  max_occupany    Int
+  hotel           Hotel     @relation(fields: [hotelId], references: [id], onDelete: Cascade)
+  hotelId        String
+  roomNumber     String
+  roomType       String
+  pricePerNight Float
+  maxOccupancy    Int
   booking         Booking[]
-  created_at      DateTime  @default(now())
+  createdAt      DateTime  @default(now())
 
-  @@unique([hotel_id, room_number])
+  @@unique([hotelId, roomNumber])
 }
 
 model Booking {
   id             String        @id @default(cuid())
-  user           User          @relation(fields: [user_id], references: [id])
-  room           Room          @relation(fields: [room_id], references: [id])
-  hotel          Hotel         @relation(fields: [hotel_id], references: [id])
-  user_id        String
-  room_id        String
-  hotel_id       String
-  check_in_date  DateTime
-  check_out_date DateTime
+  user           User          @relation(fields: [userId], references: [id])
+  room           Room          @relation(fields: [roomId], references: [id])
+  hotel          Hotel         @relation(fields: [hotelId], references: [id])
+  userId        String
+  roomId        String
+  hotelId       String
+  checkInDate  DateTime
+  checkOutDate DateTime
   guests         Int
-  total_price    Float
+  totalPrice    Float
   status         BookingStatus
-  booking_date   DateTime      @default(now())
-  cancelled_at   DateTime?
+  bookingDate   DateTime      @default(now())
+  cancelledAt   DateTime?
   review         Review?
 }
 
 model Review {
   id         String   @id @default(cuid())
-  user       User     @relation(fields: [user_id], references: [id])
-  hotel      Hotel    @relation(fields: [hotel_id], references: [id])
-  booking    Booking  @relation(fields: [booking_id], references: [id])
-  user_id    String
-  hotel_id   String
-  booking_id String   @unique
+  user       User     @relation(fields: [userId], references: [id])
+  hotel      Hotel    @relation(fields: [hotelId], references: [id])
+  booking    Booking  @relation(fields: [bookingId], references: [id])
+  userId    String
+  hotelId   String
+  bookingId String   @unique
   rating     Int
   comment    String
-  created_at DateTime @default(now())
+  createdAt DateTime @default(now())
 
-  @@unique([user_id, booking_id])
+  @@unique([userId, bookingId])
 }
 
 enum Role {

@@ -42,9 +42,9 @@ export async function handleCreateBooking(req: AuthenticatedRequest, res: Respon
     where: { id: roomId },
     select: {
       id: true,
-      hotel_id: true,
-      price_per_night: true,
-      max_occupany: true,
+      hotelId: true,
+      pricePerNight: true,
+      maxOccupancy: true,
       booking: true,
     },
   })
@@ -56,7 +56,7 @@ export async function handleCreateBooking(req: AuthenticatedRequest, res: Respon
     }
     return res.status(404).json(notFoundRespone)
   }
-  if (guests > room.max_occupany) {
+  if (guests > room.maxOccupancy) {
     const invalidCapacityResponse: ApiResponse = {
       success: false,
       data: null,
@@ -66,7 +66,7 @@ export async function handleCreateBooking(req: AuthenticatedRequest, res: Respon
   }
 
   const isBooked = room.booking.some(booking => {
-    return !(checkInDate > booking.check_out_date || checkOutDate < booking.check_in_date)
+    return !(checkInDate > booking.checkOutDate || checkOutDate < booking.checkInDate)
   })
   if (isBooked) {
     const roomUnavailableResponse: ApiResponse = {
@@ -78,15 +78,15 @@ export async function handleCreateBooking(req: AuthenticatedRequest, res: Respon
   }
 
   const atomicBooking = await db.$transaction(async tx => {
-    const totalPrice = nights * room.price_per_night
+    const totalPrice = nights * room.pricePerNight
     const bookingData = {
-      user_id: user.id,
-      room_id: room.id,
-      hotel_id: room.hotel_id,
-      check_in_date: checkInDate,
-      check_out_date: checkOutDate,
+      userId: user.id,
+      roomId: room.id,
+      hotelId: room.hotelId,
+      checkInDate: checkInDate,
+      checkOutDate: checkOutDate,
       guests: guests,
-      total_price: totalPrice,
+      totalPrice: totalPrice,
       status: BookingStatus.confirmed,
     }
     const booking = await tx.booking.create({
@@ -97,15 +97,15 @@ export async function handleCreateBooking(req: AuthenticatedRequest, res: Respon
 
   const orderedBooking = {
     id: atomicBooking.id,
-    userId: atomicBooking.user_id,
-    roomId: atomicBooking.room_id,
-    hotelId: atomicBooking.hotel_id,
+    userId: atomicBooking.userId,
+    roomId: atomicBooking.roomId,
+    hotelId: atomicBooking.hotelId,
     checkInDate,
     checkOutDate,
     guests,
-    totalPrice: atomicBooking.total_price,
+    totalPrice: atomicBooking.totalPrice,
     status: atomicBooking.status,
-    bookingDate: atomicBooking.booking_date,
+    bookingDate: atomicBooking.bookingDate,
   }
   const successResponse: ApiResponse = {
     success: true,

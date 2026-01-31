@@ -34,21 +34,21 @@ export async function handleGetHotels(req: AuthenticatedRequest, res: Response) 
   if (query.minPrice !== undefined) {
     const minPrice = query.minPrice
     hotels = hotels.filter(hotel =>
-      hotel.rooms.some(room => room.price_per_night > minPrice)
+      hotel.rooms.some(room => room.pricePerNight > minPrice)
     )
   }
 
   if (query.maxPrice !== undefined) {
     const maxPrice = query.maxPrice
     hotels = hotels.filter(hotel =>
-      hotel.rooms.some(room => room.price_per_night < maxPrice)
+      hotel.rooms.some(room => room.pricePerNight < maxPrice)
     )
   }
 
   hotels.filter(hotel => hotel.rooms.length > 0)
 
   const structuredHotels = hotels.map(hotel => {
-    const lowestPrice = Math.min(...hotel.rooms.map(room => room.price_per_night))
+    const lowestPrice = Math.min(...hotel.rooms.map(room => room.pricePerNight))
     return {
       id: hotel.id,
       name: hotel.name,

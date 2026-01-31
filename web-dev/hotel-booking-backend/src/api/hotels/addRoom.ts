@@ -28,7 +28,7 @@ export async function handleAddRoom(req: AuthenticatedRequest, res: Response) {
 
   const hotel = await db.hotel.findUnique({
     where: { id: hotelId },
-    select: { owner_id: true, rooms: true },
+    select: { ownerId: true, rooms: true },
   })
 
   if (!hotel) {
@@ -40,7 +40,7 @@ export async function handleAddRoom(req: AuthenticatedRequest, res: Response) {
     return res.status(404).json(notFoundResponse)
   }
 
-  const roomExists = hotel.rooms.find(room => room.room_number == parsedReq.roomNumber)
+  const roomExists = hotel.rooms.find(room => room.roomNumber == parsedReq.roomNumber)
   if (roomExists) {
     const roomExistsResponse: ApiResponse = {
       success: false,
@@ -50,7 +50,7 @@ export async function handleAddRoom(req: AuthenticatedRequest, res: Response) {
     return res.status(403).json(roomExistsResponse)
   }
 
-  if (!req.user || req.user.role === 'customer' || req.user.id !== hotel.owner_id) {
+  if (!req.user || req.user.role === 'customer' || req.user.id !== hotel.ownerId) {
     const forbiddenResponse: ApiResponse = {
       success: false,
       data: null,
@@ -61,20 +61,20 @@ export async function handleAddRoom(req: AuthenticatedRequest, res: Response) {
 
   const room = await db.room.create({
     data: {
-      room_number: parsedReq.roomNumber,
-      room_type: parsedReq.roomType,
-      price_per_night: parsedReq.pricePerNight,
-      max_occupany: parsedReq.maxOccupancy,
-      hotel_id: hotelId,
+      roomNumber: parsedReq.roomNumber,
+      roomType: parsedReq.roomType,
+      pricePerNight: parsedReq.pricePerNight,
+      maxOccupancy: parsedReq.maxOccupancy,
+      hotelId: hotelId,
     },
   })
   const orderedData = {
     id: room.id,
-    hotelId: room.hotel_id,
-    roomNumber: room.room_number,
-    roomType: room.room_type,
-    pricePerNight: room.price_per_night,
-    maxOccupancy: room.max_occupany,
+    hotelId: room.hotelId,
+    roomNumber: room.roomNumber,
+    roomType: room.roomType,
+    pricePerNight: room.pricePerNight,
+    maxOccupancy: room.maxOccupancy,
   }
   const successResponse: ApiResponse = {
     success: true,

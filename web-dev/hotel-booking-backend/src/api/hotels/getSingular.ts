@@ -27,14 +27,14 @@ export async function handleGetSingularHotel(req: AuthenticatedRequest, res: Res
 
   const orderedHotel = {
     id: hotel.id,
-    ownerId: hotel.owner_id,
+    ownerId: hotel.ownerId,
     name: hotel.name,
     description: hotel.description,
     city: hotel.city,
     country: hotel.country,
     amenities: hotel.amenities,
     rating: hotel.rating,
-    totalReviews: hotel.total_reviews,
+    totalReviews: hotel.totalReviews,
     rooms: hotel.rooms,
   }
   const successResponse: ApiResponse = {

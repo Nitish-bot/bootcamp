@@ -25,15 +25,15 @@ export async function handleGetBooking(req: AuthenticatedRequest, res: Response)
 
   const { status } = querySchema.parse(req.query)
   const bookings = await db.booking.findMany({
-    where: { user_id: user.id, status },
+    where: { userId: user.id, status },
     include: {
       hotel: {
         select: { name: true },
       },
       room: {
         select: {
-          room_number: true,
-          room_type: true,
+          roomNumber: true,
+          roomType: true,
         },
       },
     },
@@ -41,17 +41,17 @@ export async function handleGetBooking(req: AuthenticatedRequest, res: Response)
   const bookingData = bookings.map(booking => {
     const orderedBooking = {
       id: booking.id,
-      roomId: booking.room_id,
-      hotelId: booking.hotel_id,
+      roomId: booking.roomId,
+      hotelId: booking.hotelId,
       hotelName: booking.hotel.name,
-      roomNumber: booking.room.room_number,
-      roomType: booking.room.room_type,
-      checkInDate: booking.check_in_date,
-      checkOutDate: booking.check_out_date,
+      roomNumber: booking.room.roomNumber,
+      roomType: booking.room.roomType,
+      checkInDate: booking.checkInDate,
+      checkOutDate: booking.checkOutDate,
       guests: booking.guests,
-      totalPrice: booking.total_price,
+      totalPrice: booking.totalPrice,
       status: booking.status,
-      bookingDate: booking.booking_date,
+      bookingDate: booking.bookingDate,
     }
     return orderedBooking
   })
