@@ -1,5 +1,5 @@
-import type { Request } from "express"
-import type { Role } from "./generated/prisma/enums"
+import type { Request } from 'express'
+import type { Role } from '@/generated/prisma/enums'
 
 export type ApiResponse<T = unknown> =
   | {

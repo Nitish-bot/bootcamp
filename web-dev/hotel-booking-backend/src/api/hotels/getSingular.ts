@@ -1,26 +1,26 @@
-import { db } from "@/db";
-import type { ApiResponse, AuthenticatedRequest } from "@/types";
-import type { Response } from "express";
-import z from "zod";
+import { db } from '@/db'
+import type { ApiResponse, AuthenticatedRequest } from '@/types'
+import type { Response } from 'express'
+import z from 'zod'
 
 const paramsSchema = z.object({
-  hotelId: z.string()
+  hotelId: z.string(),
 })
 
 export async function handleGetSingularHotel(req: AuthenticatedRequest, res: Response) {
   const { hotelId } = paramsSchema.parse(req.params)
   const hotel = await db.hotel.findUnique({
-    where: {id: hotelId},
+    where: { id: hotelId },
     include: {
-      rooms: true
-    }
+      rooms: true,
+    },
   })
 
   if (!hotel) {
     const notFoundResponse: ApiResponse = {
       success: false,
       data: null,
-      error: "HOTEL_NOT_FOUND"
+      error: 'HOTEL_NOT_FOUND',
     }
     return res.status(404).json(notFoundResponse)
   }

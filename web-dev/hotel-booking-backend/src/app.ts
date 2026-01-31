@@ -5,6 +5,7 @@ import { loginSchema, handleLogin } from '@/api/auth/login'
 import { createHotelSchema, handleCreateHotel } from '@/api/hotels/create'
 import { addRoomSchema, handleAddRoom } from '@/api/hotels/addRoom'
 import { handleGetHotels } from '@/api/hotels/getHotels'
+import { handleGetSingularHotel } from '@/api/hotels/getSingular'
 
 export function createApp() {
   const app = express()
@@ -14,8 +15,18 @@ export function createApp() {
   app.post('/api/auth/login', requestValidator(loginSchema), handleLogin)
 
   app.get('/api/hotels', jwtValidator, handleGetHotels)
-  app.post('/api/hotels', [requestValidator(createHotelSchema), jwtValidator], handleCreateHotel)
-  app.post('/api/hotels/:hotelId/rooms', [requestValidator(addRoomSchema), jwtValidator], handleAddRoom)
+  app.post(
+    '/api/hotels',
+    [requestValidator(createHotelSchema), jwtValidator],
+    handleCreateHotel
+  )
+
+  app.get('/api/hotels/:hotelId', jwtValidator, handleGetSingularHotel)
+  app.post(
+    '/api/hotels/:hotelId/rooms',
+    [requestValidator(addRoomSchema), jwtValidator],
+    handleAddRoom
+  )
 
   return app
 }

@@ -1,13 +1,19 @@
-import { db } from "@/db";
-import type { ApiResponse, AuthenticatedRequest } from "@/types";
-import type { Response } from "express";
-import z from "zod";
+import { db } from '@/db'
+import type { ApiResponse, AuthenticatedRequest } from '@/types'
+import type { Response } from 'express'
+import z from 'zod'
 
 export const createHotelSchema = z.object({
   name: z.string().nonempty(),
   description: z.string().nonempty(),
-  city: z.string().nonempty().transform((val) => val?.toLowerCase()),
-  country: z.string().nonempty().transform((val) => val?.toLowerCase()),
+  city: z
+    .string()
+    .nonempty()
+    .transform(val => val?.toLowerCase()),
+  country: z
+    .string()
+    .nonempty()
+    .transform(val => val?.toLowerCase()),
   amenities: z.array(z.string()).optional().default([]),
 })
 
@@ -18,7 +24,7 @@ export async function handleCreateHotel(req: AuthenticatedRequest, res: Response
     const forbiddenResponse: ApiResponse = {
       success: false,
       data: null,
-      error: "FORBIDDEN"
+      error: 'FORBIDDEN',
     }
     return res.status(403).json(forbiddenResponse)
   }
@@ -27,8 +33,8 @@ export async function handleCreateHotel(req: AuthenticatedRequest, res: Response
   const hotel = await db.hotel.create({
     data: {
       ...parsedReq,
-      owner_id: req.user.id, 
-    }
+      owner_id: req.user.id,
+    },
   })
 
   const orderedData = {
@@ -40,12 +46,12 @@ export async function handleCreateHotel(req: AuthenticatedRequest, res: Response
     country: hotel.country,
     amenities: hotel.amenities,
     rating: 0.0,
-    totalReviews: 0
+    totalReviews: 0,
   }
   const successResponse: ApiResponse = {
     success: true,
     data: orderedData,
-    error: null
+    error: null,
   }
   return res.status(201).json(successResponse)
 }

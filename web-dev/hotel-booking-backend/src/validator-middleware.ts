@@ -3,7 +3,7 @@ import { type ZodType } from 'zod'
 import type { ApiResponse, AuthenticatedRequest } from '@/types'
 import { jwtVerify } from 'jose'
 import { env } from 'bun'
-import type { Role } from './generated/prisma/enums'
+import type { Role } from '@/generated/prisma/enums'
 
 export function requestValidator(schema: ZodType) {
   return (req: Request, res: Response, next: NextFunction) => {
@@ -29,7 +29,11 @@ export function requestValidator(schema: ZodType) {
   }
 }
 
-export async function jwtValidator(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+export async function jwtValidator(
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) {
   console.log(req.headers)
   const authHeader = req.headers['authorization']
   console.log(authHeader)
@@ -46,19 +50,19 @@ export async function jwtValidator(req: AuthenticatedRequest, res: Response, nex
 
   try {
     const jwtSecretKey = new TextEncoder().encode(env.JWT_SECRET_KEY)
-    const {payload, protectedHeader} = await jwtVerify(token, jwtSecretKey)
+    const { payload, protectedHeader } = await jwtVerify(token, jwtSecretKey)
     console.log(payload)
     console.log(protectedHeader)
     if (!payload.sub || !payload.role) {
       return res.status(401).json({
         success: false,
         data: null,
-        error: "INVALID_TOKEN_PAYLOAD"
+        error: 'INVALID_TOKEN_PAYLOAD',
       })
     }
     const user = {
       id: payload.sub,
-      role: payload.role as Role
+      role: payload.role as Role,
     }
     req.user = user
     next()
