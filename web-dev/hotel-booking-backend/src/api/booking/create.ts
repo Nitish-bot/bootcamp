@@ -6,8 +6,8 @@ import z from 'zod'
 
 export const createBookingSchema = z.object({
   roomId: z.string().nonempty(),
-  checkInDate: z.date(),
-  checkOutDate: z.date(),
+  checkInDate: z.coerce.date(),
+  checkOutDate: z.coerce.date(),
   guests: z.number().int(),
 })
 
@@ -27,13 +27,14 @@ export async function handleCreateBooking(req: AuthenticatedRequest, res: Respon
 
   const { roomId, checkInDate, checkOutDate, guests }: createBookingRequest = req.body
 
+  const today = new Date().setHours(0, 0, 0, 0)
   const booking_length = checkOutDate.getDate() - checkInDate.getDate()
   const nights = booking_length / ONE_DAY
-  if (nights < 1) {
+  if (nights < 1 || checkInDate.getMilliseconds() < today) {
     const invalidDatesResponse: ApiResponse = {
       success: false,
       data: null,
-      error: 'ROOM_NOT_FOUND',
+      error: 'INVALID_DATES',
     }
     return res.status(404).json(invalidDatesResponse)
   }
