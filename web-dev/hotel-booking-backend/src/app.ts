@@ -6,9 +6,10 @@ import { createHotelSchema, handleCreateHotel } from '@/api/hotels/create'
 import { addRoomSchema, handleAddRoom } from '@/api/hotels/addRoom'
 import { handleGetHotels } from '@/api/hotels/getHotels'
 import { handleGetSingularHotel } from '@/api/hotels/getSingular'
-import { createBookingSchema, handleCreateBooking } from './api/booking/create'
-import { handleGetBooking } from './api/booking/get'
-import { handleCancelBooking } from './api/booking/cancel'
+import { createBookingSchema, handleCreateBooking } from '@/api/booking/create'
+import { handleGetBooking } from '@/api/booking/get'
+import { handleCancelBooking } from '@/api/booking/cancel'
+import { createReviewSchema, handleCreateReview } from '@/api/reviews/create'
 
 export function createApp() {
   const app = express()
@@ -37,6 +38,12 @@ export function createApp() {
   )
   app.put('/api/bookings/:bookingId/cancel', jwtValidator, handleCancelBooking)
   app.get('/api/bookings', jwtValidator, handleGetBooking)
+
+  app.post(
+    '/api/reviews',
+    [requestValidator(createReviewSchema), jwtValidator],
+    handleCreateReview
+  )
 
   return app
 }
