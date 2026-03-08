@@ -12,7 +12,6 @@ int main() {
     }
   }
 
-  bool right = true;
   if (m == 1) {
     for (int i = 0; i < n; i++) {
       cout << arr[i][0] << " ";
